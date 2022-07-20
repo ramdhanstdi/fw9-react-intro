@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import {Button} from "react-bootstrap"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const Count = ({number}) =>{
+  React.useEffect(()=>{
+    console.log(number);
+  },[number])
+    return(
+    <>
+    <h1 className="my-auto">{number}</h1>
+    </>)
 }
 
-export default App;
+const App = () => {
+  const [value, increment] =React.useState(0)
+  return(
+    <div className="parent d-flex justify-content-center alight-items-center">
+      <div className="d-flex my-auto">
+        <Button className="mx-5 size-btn" onClick={()=>value===0?increment(value+0):increment(value-1)}>Dec</Button>
+        {<Count number={value}></Count>}
+        <Button className="mx-5 size-btn" onClick={()=>increment(value+1)}>Inc</Button>
+      </div>
+    </div>
+  )
+}
+
+export default App
