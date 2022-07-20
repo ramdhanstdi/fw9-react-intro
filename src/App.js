@@ -1,27 +1,65 @@
-import React from "react"
-import {Button} from "react-bootstrap"
+import React from "react";
+import axios from "axios";
+import { Col, Container, Row } from "react-bootstrap";
 
-const Count = ({number}) =>{
-  React.useEffect(()=>{
-    console.log(number);
-  },[number])
+const api = axios.create({
+  baseURL:'https://rickandmortyapi.com/api/character'
+})
+
+class App extends React.Component{
+  state={
+    data:[]
+  }
+
+  constructor() {
+    super();
+    api.get('/').then(res => {
+      console.log(res.data.results);
+      this.setState({data: res.data.results})
+    })
+  }
+
+  render(){
     return(
-    <>
-    <h1 className="my-auto">{number}</h1>
-    </>)
-}
-
-const App = () => {
-  const [value, increment] =React.useState(0)
-  return(
-    <div className="parent d-flex justify-content-center alight-items-center">
-      <div className="d-flex my-auto">
-        <Button className="mx-5 size-btn" onClick={()=>value===0?increment(value+0):increment(value-1)}>Dec</Button>
-        {<Count number={value}></Count>}
-        <Button className="mx-5 size-btn" onClick={()=>increment(value+1)}>Inc</Button>
-      </div>
-    </div>
-  )
+      <Container className="w-100">
+        <Row className="d-flex justify-content-between">
+          {this.state.data.map(result=>
+          <Col s={12} md={3} key={result.id}>
+            <img className="w-100" src={result.image} alt={result.name}></img>
+            <h2 className="text-center">{result.name}</h2>
+            </Col>)}
+        </Row>
+      </Container>
+    )
+  }
 }
 
 export default App
+
+// const App = () => {
+//   const [data,setData] = React.useState([])
+//   const mount = async () => {
+//     try{
+//       const res = await api.get('/')
+//       setData(res.data.results)
+//       console.log(setData);
+//     }
+//     catch{
+//       console.log('error');
+//     }
+//   }
+//   React.useEffect(()=>
+//   mount(), [])
+
+//   return(
+//           <Container className="w-100">
+//             <Row className="d-flex justify-content-between">
+//               {data&&data.map(result=>
+//               <Col s={12} md={3} key={result.id}>
+//                 <img className="w-100" src={result.image} alt={result.name}></img>
+//                 <h2 className="text-center">{result.name}</h2>
+//                 </Col>)}
+//             </Row>
+//           </Container>
+//         )
+// }
